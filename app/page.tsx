@@ -23,7 +23,7 @@ export default function Home() {
               <Card.Description>Enter the results of a quiz</Card.Description>
             </Card.Body>
             <Card.Footer justifyContent="flex-end">
-              <Link href="/leaderboard"><Button>Go</Button></Link>
+              <Link href="/"><Button>Go</Button></Link>
             </Card.Footer>
           </Card.Root>
         </GridItem>
