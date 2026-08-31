@@ -1,31 +1,39 @@
 import { Button, Card, Grid, GridItem, Heading, Link } from "@chakra-ui/react";
 
+type MenuCardProps = {
+  title: string;
+  description: string;
+  link: string;
+}
+
+const MenuCard = ({ title, description, link }: MenuCardProps) => <Card.Root>
+  <Card.Body gap="2">
+    <Card.Title mb="2">{title}</Card.Title>
+    <Card.Description>{description}</Card.Description>
+  </Card.Body>
+  <Card.Footer justifyContent="flex-end">
+    <Link href={link}><Button>Go</Button></Link>
+  </Card.Footer>
+</Card.Root>
+
 export default function Home() {
   return (
     <>
       <Heading size="5xl" paddingLeft="10">Welcome to the Quiz Season App!</Heading>
       <Grid templateColumns="repeat(2, 1fr)" gap="6" padding="10">
         <GridItem>
-          <Card.Root>
-            <Card.Body gap="2">
-              <Card.Title mb="2">Leaderboard</Card.Title>
-              <Card.Description>View the current Quiz Season Leaderboard</Card.Description>
-            </Card.Body>
-            <Card.Footer justifyContent="flex-end">
-              <Link href="/leaderboard"><Button>Go</Button></Link>
-            </Card.Footer>
-          </Card.Root>
+          <MenuCard 
+            title="Leaderboard" 
+            description="View the current Quiz Season Leaderboard" 
+            link="/leaderboard">
+          </MenuCard>
         </GridItem>
         <GridItem>
-          <Card.Root>
-            <Card.Body gap="2">
-              <Card.Title mb="2">Enter Quiz</Card.Title>
-              <Card.Description>Enter the results of a quiz</Card.Description>
-            </Card.Body>
-            <Card.Footer justifyContent="flex-end">
-              <Link href="/"><Button>Go</Button></Link>
-            </Card.Footer>
-          </Card.Root>
+          <MenuCard 
+            title="Enter Quiz" 
+            description="Enter the results of a quiz" 
+            link="/">
+          </MenuCard>
         </GridItem>
       </Grid>
     </>
