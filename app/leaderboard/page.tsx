@@ -1,4 +1,7 @@
+'use client'
+
 import { Box, Heading, Table } from "@chakra-ui/react"
+import { Fragment, useState } from "react";
 
 type User = {
     id: string;
@@ -34,6 +37,8 @@ const mockData: User[] = [
 ]
 
 export default function Leaderboard() {
+    const [expanded, setExpanded] = useState<string | undefined>()
+
     return <>
         <Heading size="5xl" paddingLeft="10">Leaderboard</Heading>
         <Box padding="10">
@@ -47,11 +52,19 @@ export default function Leaderboard() {
                 </Table.Header>
                 <Table.Body>
                     {mockData.map((item) => (
-                        <Table.Row key={item.id}>
-                            <Table.Cell>{item.position}</Table.Cell>
-                            <Table.Cell>{item.name}</Table.Cell>
-                            <Table.Cell>{item.total}</Table.Cell>
-                        </Table.Row>
+                        <Fragment key={item.id}>
+                            <Table.Row key={item.id} onClick={() => expanded === item.id ? setExpanded(undefined) : setExpanded(item.id)}>
+                                <Table.Cell>{item.position}</Table.Cell>
+                                <Table.Cell>{item.name}</Table.Cell>
+                                <Table.Cell>{item.total}</Table.Cell>
+                            </Table.Row>
+                            { expanded === item.id && <Table.Row>
+                                <Table.Cell colSpan={3}>
+                                <Box padding="4" borderWidth="1px">
+                                <Heading size="md">Points Breakdown</Heading>
+                                {Object.entries(item.results).map(([key, value]) => <div key={`${item.id}-${key}`}>{key}: {value}</div>)}
+                            </Box></Table.Cell></Table.Row>}
+                        </Fragment>
                     ))}
                 </Table.Body>
             </Table.Root>
