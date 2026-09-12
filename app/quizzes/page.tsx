@@ -1,4 +1,4 @@
-import { Button, Card, Heading, Stack } from "@chakra-ui/react";
+import { Button, Card, Heading, Link, Stack } from "@chakra-ui/react";
 
 interface Quiz {
     id: string;
@@ -13,7 +13,7 @@ const mockData: Quiz[] = [
         season: 'Quiz Season 2026'
     },
     {
-        id: '123',
+        id: '456',
         name: 'Family Fortunes',
         season: 'Quiz Season 2026'
     }
@@ -30,7 +30,7 @@ export default function Quizzes() {
                     </Card.Header>
                     <Card.Body color="fg.muted">{quiz.season}</Card.Body>
                     <Card.Footer justifyContent="flex-end">
-                        <Button>View</Button>
+                       <Link href={`/view-quiz/${quiz.id}`}><Button>View</Button></Link>
                     </Card.Footer>
                 </Card.Root>)}
         </Stack>
