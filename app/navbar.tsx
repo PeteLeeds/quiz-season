@@ -44,7 +44,7 @@ const MenuLinks = () => {
       >
         <MenuItem to="/">Home</MenuItem>
         <MenuItem to="/leaderboard">Leaderboard</MenuItem>
-        <MenuItem to="/">Quizzes</MenuItem>
+        <MenuItem to="/quizzes">Quizzes</MenuItem>
       </Stack>
     </Box>
   );

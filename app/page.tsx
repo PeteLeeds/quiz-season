@@ -30,9 +30,9 @@ export default function Home() {
         </GridItem>
         <GridItem>
           <MenuCard 
-            title="Enter Quiz" 
-            description="Enter the results of a quiz" 
-            link="/">
+            title="Quizzes" 
+            description="View and edit quiz results, and enter new quizzes" 
+            link="/quizzes">
           </MenuCard>
         </GridItem>
       </Grid>
