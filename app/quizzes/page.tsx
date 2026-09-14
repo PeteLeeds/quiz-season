@@ -1,4 +1,4 @@
-import { Button, Card, Heading, Link, Stack } from "@chakra-ui/react";
+import { Button, Card, Flex, Heading, Link, Spacer, Stack } from "@chakra-ui/react";
 
 interface Quiz {
     id: string;
@@ -21,7 +21,11 @@ const mockData: Quiz[] = [
 
 export default function Quizzes() {
     return <>
-        <Heading size="5xl" paddingLeft="10" marginBottom="5">Quizzes</Heading>
+        <Flex>
+            <Heading size="5xl" paddingLeft="10" marginBottom="5">Quizzes</Heading>
+            <Spacer />
+            <Link href="/enter-quiz"><Button marginRight="10">Enter New Quiz</Button></Link>
+        </Flex>
         <Stack>
             {mockData.map(quiz =>
                 <Card.Root marginLeft="10" marginRight="10" key={quiz.id} size="sm">
