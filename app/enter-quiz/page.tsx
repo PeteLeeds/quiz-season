@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, Field, Flex, Heading, Input, NativeSelect, Stack, Text } from "@chakra-ui/react";
+import { Card, Center, Field, Flex, Heading, Input, NativeSelect, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 
 const quizSeasons = [
@@ -14,22 +14,24 @@ const getTiedPosition = (entryPosition, positions) => {
 
 export default function ViewQuiz() {
     const [positions, setPositions] = useState<{ name: string, tied: boolean }[]>([])
+    const [availableUsers, setAvailableUsers] = useState<string[]>(["John", "Chris", "Anne"])
 
-    const addUser = (name: string) => {
-        setPositions([...positions, {name, tied: false}])
+    const addUser = (position: number) => {
+        setPositions([...positions, { name: availableUsers[position], tied: false }])
+        const newAvailableUsers = availableUsers.toSpliced(position, 1)
+        setAvailableUsers(newAvailableUsers)
     }
 
     const positionsStackItems = []
     for (let i = 1; i <= 30; i++) {
-        const entry = positions.length > i ? positions[i] : undefined;
-        console.log('POSITION', positions.length, i, entry, positions)
+        const entry = positions.length > i - 1 ? positions[i - 1] : undefined;
         const position = entry?.tied ? getTiedPosition(i, positions) : i
         positionsStackItems.push(<Flex>
             <Text>{position}</Text>
             {entry && <Card.Root w="1/2" alignItems={"center"} marginLeft="10" marginRight="10" key={entry.name} size="sm">
-                <Card.Header>
-                    <Heading size="md">{entry.name}</Heading>
-                </Card.Header>
+                <Card.Body>
+                    <Center><Heading size="md">{entry.name}</Heading></Center>
+                </Card.Body>
             </Card.Root>}
         </Flex>
         )
@@ -55,10 +57,18 @@ export default function ViewQuiz() {
         <Flex marginTop={10}>
             <Stack w="1/4">
                 <Heading size="3xl" paddingLeft="10" marginBottom="5">Users</Heading>
-                {["John", "Chris", "Anne"].map(name => <Card.Root alignItems={"center"} marginLeft="10" marginRight="10" key={name} size="sm" onClick={() => addUser(name)}>
-                    <Card.Header>
-                        <Heading size="md">{name}</Heading>
-                    </Card.Header>
+                {availableUsers.map((name, i) => <Card.Root
+                    cursor="pointer"
+                    marginLeft="10"
+                    marginRight="10"
+                    key={name}
+                    size="sm"
+                    _hover={{background: "#ADD8E6"}}
+                    onClick={() => addUser(i)}
+                >
+                    <Card.Body>
+                        <Center><Heading size="md">{name}</Heading></Center>
+                    </Card.Body>
                 </Card.Root>)}
             </Stack>
             <Stack w="1/4">
