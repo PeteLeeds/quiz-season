@@ -3,7 +3,7 @@
 import { Button, Card, Center, Field, Flex, Heading, Input, NativeSelect, Stack, Text } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { faHandshake, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faHandshake, faTrashCan, faUpDown } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 const quizSeasons = [
@@ -25,6 +25,8 @@ const IconButton = ({icon, action}: {icon: IconProp, action: () => void}) =>
 export default function ViewQuiz() {
     const [positions, setPositions] = useState<string[][]>([])
     const [availableUsers, setAvailableUsers] = useState<string[]>(["John", "Chris", "Anne", "Debbie"])
+    const [userToMove, setUserToMove] = useState<string | undefined>(undefined)
+    const [moveHere, setMoveHere] = useState<number>(0)
 
     const addUser = (position: number) => {
         setPositions([...positions, [availableUsers[position]]])
@@ -72,7 +74,10 @@ export default function ViewQuiz() {
     for (let i = 1; i <= 30; i++) {
         const entry = flatPositions.length > i - 1 ? flatPositions[i - 1] : undefined;
         const position = entry?.position || i
-        positionsStackItems.push(<Flex>
+        if (userToMove && moveHere == i && entry) {
+            positionsStackItems.push(<Button>Move Here</Button>)
+        }
+        positionsStackItems.push(<Flex onMouseEnter={() => setMoveHere(i)}>
             <Text>{position}</Text>
             {entry && <Card.Root w="1/2" alignItems={"center"} marginLeft="10" marginRight="10" key={entry.name} size="sm">
                 <Card.Body>
@@ -80,6 +85,7 @@ export default function ViewQuiz() {
                         <Heading size="md">{entry.name}</Heading>
                         <IconButton icon={faTrashCan} action={() => removeUser(entry.name, entry.position - 1)}></IconButton>
                         <IconButton icon={faHandshake} action={() => tieUser(entry.name, entry.position - 1)}></IconButton>
+                        <IconButton icon={faUpDown} action={() => setUserToMove(entry.name)}></IconButton>
                     </Center>
                 </Card.Body>
             </Card.Root>}
