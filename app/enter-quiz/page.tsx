@@ -11,10 +11,6 @@ const quizSeasons = [
     "2025 Quiz Season"
 ]
 
-const getTiedPosition = (entryPosition, positions) => {
-    return 10
-}
-
 const IconButton = ({icon, action}: {icon: IconProp, action: () => void}) =>
     <Button
         cursor="pointer"
@@ -27,44 +23,63 @@ const IconButton = ({icon, action}: {icon: IconProp, action: () => void}) =>
 
 
 export default function ViewQuiz() {
-    const [positions, setPositions] = useState<{ name: string, tied: boolean }[]>([])
-    const [availableUsers, setAvailableUsers] = useState<string[]>(["John", "Chris", "Anne"])
+    const [positions, setPositions] = useState<string[][]>([])
+    const [availableUsers, setAvailableUsers] = useState<string[]>(["John", "Chris", "Anne", "Debbie"])
 
     const addUser = (position: number) => {
-        setPositions([...positions, { name: availableUsers[position], tied: false }])
+        setPositions([...positions, [availableUsers[position]]])
         const newAvailableUsers = availableUsers.toSpliced(position, 1)
         setAvailableUsers(newAvailableUsers)
     }
 
-    const removeUser = (position: number) => {
-        const userName = positions[position].name
-        const newPositions = positions.toSpliced(position, 1)
-        setPositions(newPositions)
-        setAvailableUsers([...availableUsers, userName])
-    }
-
-    const tieUser = (name: string) => {
-        const newPositions = positions.map(pos => {
-            if (pos.name === name) {
-                return {name, tied: !pos.tied}
+    const removeUser = (name: string, position: number) => {
+        const newPositions = positions.flatMap((pos, i) => {
+            if (i !== position) {
+                return [pos]
             }
-            return pos
+            const newArray = pos.filter(user => user !== name)
+            return newArray.length > 0 ? [newArray] : []
         })
         setPositions(newPositions)
+        setAvailableUsers([...availableUsers, name])
     }
+
+    const tieUser = (name: string, position: number) => {
+        if (position === 0 && positions[position].length === 1) {
+            console.warn('Cannot tie user in first place')
+            return
+        }
+        if (positions[position].length === 1) {
+            const newPositions = positions.toSpliced(position, 1)
+            newPositions[position - 1].push(name)
+            setPositions(newPositions)
+        } else {
+            const newPositions = positions.toSpliced(position + 1, 0, [name]).map((pos, i) => {
+                if (i === position) return pos.filter(user => user !== name)
+                return pos
+            })
+            setPositions(newPositions)
+        }
+    }
+
+    const flatPositions = positions.flatMap((pos, i) => pos.map(user => ({
+        name: user,
+        position: i + 1,
+        tied: pos.length > 1
+    })))
 
     const positionsStackItems = []
     for (let i = 1; i <= 30; i++) {
-        const entry = positions.length > i - 1 ? positions[i - 1] : undefined;
-        const position = entry?.tied ? getTiedPosition(i, positions) : i
+        const entry = flatPositions.length > i - 1 ? flatPositions[i - 1] : undefined;
+        const position = entry?.position || i
         positionsStackItems.push(<Flex>
             <Text>{position}</Text>
             {entry && <Card.Root w="1/2" alignItems={"center"} marginLeft="10" marginRight="10" key={entry.name} size="sm">
                 <Card.Body>
                     <Center>
                         <Heading size="md">{entry.name}</Heading>
-                        <IconButton icon={faTrashCan} action={() => removeUser(i - 1)}></IconButton>
-                        <IconButton icon={faHandshake} action={() => tieUser(entry.name)}></IconButton>
+                        <IconButton icon={faTrashCan} action={() => removeUser(entry.name, entry.position - 1)}></IconButton>
+                        <IconButton icon={faHandshake} action={() => tieUser(entry.name, entry.position - 1)}></IconButton>
                     </Center>
                 </Card.Body>
             </Card.Root>}
