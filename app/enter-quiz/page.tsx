@@ -64,6 +64,21 @@ export default function ViewQuiz() {
         }
     }
 
+    const moveUser = (pos: number) => {
+        if (!userToMove) {
+            throw new Error('No user selected to move')
+        }
+        const newPositions = positions.toSpliced(pos, 0, [userToMove]).flatMap((userPosition, i) => {
+            if (i === pos) {
+                return [userPosition]
+            }
+            const newPositionArray = userPosition.filter(user => user !== userToMove)
+            return newPositionArray.length > 0 ? [newPositionArray] : []
+        })
+        setPositions(newPositions)
+        setUserToMove(undefined)
+    }
+
     const flatPositions = positions.flatMap((pos, i) => pos.map(user => ({
         name: user,
         position: i + 1,
@@ -74,8 +89,8 @@ export default function ViewQuiz() {
     for (let i = 1; i <= 30; i++) {
         const entry = flatPositions.length > i - 1 ? flatPositions[i - 1] : undefined;
         const position = entry?.position || i
-        if (userToMove && moveHere == i && entry) {
-            positionsStackItems.push(<Button>Move Here</Button>)
+        if (userToMove && moveHere == i && flatPositions.length > i - 2) {
+            positionsStackItems.push(<Button onClick={() => moveUser(position - 1)}>Move Here</Button>)
         }
         positionsStackItems.push(<Flex onMouseEnter={() => setMoveHere(i)}>
             <Text>{position}</Text>
