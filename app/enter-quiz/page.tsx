@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Card, Center, Field, Flex, Heading, Input, NativeSelect, Stack, Text } from "@chakra-ui/react";
+import { Button, Card, Center, Field, Flex, Heading, Input, NativeSelect, Spacer, Stack, Text } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { faHandshake, faTrashCan, faUpDown } from "@fortawesome/free-solid-svg-icons";
@@ -14,11 +14,12 @@ const quizSeasons = [
 const IconButton = ({icon, action}: {icon: IconProp, action: () => void}) =>
     <Button
         cursor="pointer"
-        width="1/4"
-        marginLeft="1"
+        size="xs"
+        h="20px"
+        marginTop="0.5"
         onClick={action}
     >
-        <FontAwesomeIcon icon={icon} />
+        <FontAwesomeIcon size="2xs" icon={icon} />
     </Button>
 
 
@@ -92,25 +93,32 @@ export default function ViewQuiz() {
         if (userToMove && moveHere == i && flatPositions.length > i - 2) {
             positionsStackItems.push(<Button onClick={() => moveUser(position - 1)}>Move Here</Button>)
         }
-        positionsStackItems.push(<Flex onMouseEnter={() => setMoveHere(i)}>
-            <Text>{position}</Text>
-            {entry && <Card.Root w="1/2" alignItems={"center"} marginLeft="10" marginRight="10" key={entry.name} size="sm">
-                <Card.Body>
-                    <Center>
-                        <Heading size="md">{entry.name}</Heading>
-                        <IconButton icon={faTrashCan} action={() => removeUser(entry.name, entry.position - 1)}></IconButton>
-                        <IconButton icon={faHandshake} action={() => tieUser(entry.name, entry.position - 1)}></IconButton>
-                        <IconButton icon={faUpDown} action={() => setUserToMove(entry.name)}></IconButton>
-                    </Center>
+        if (entry) {
+            positionsStackItems.push(<Flex alignItems="center" onMouseEnter={() => setMoveHere(i)}>
+            <Text textStyle="lg" fontWeight="bold">{position}</Text>
+            <Card.Root w="3/4" alignItems={"center"} marginLeft="10" marginRight="10" key={entry.name} size="sm">
+                <Card.Body w="full" pt="2" pb="2">
+                    <Flex>
+                        <Center width="full">
+                            <Heading size="md">{entry.name}</Heading>
+                        </Center>
+                        <Spacer />
+                        <Flex alignItems="right" direction="column">
+                            <IconButton icon={faTrashCan} action={() => removeUser(entry.name, entry.position - 1)}></IconButton>
+                            <IconButton icon={faHandshake} action={() => tieUser(entry.name, entry.position - 1)}></IconButton>
+                            <IconButton icon={faUpDown} action={() => setUserToMove(entry.name)}></IconButton>
+                        </Flex>
+                    </Flex>
                 </Card.Body>
-            </Card.Root>}
+            </Card.Root>
         </Flex>
-        )
+        )   
+        }
     }
 
-    return <>
+    return <Flex alignItems="center" direction="column" width="100%">
         <Heading size="5xl" paddingLeft="10" marginBottom="5">Enter Quiz</Heading>
-        <Stack marginLeft="10" maxW="sm">
+        <Stack marginLeft="10" w="1/4">
             <Field.Root>
                 <Field.Label>Quiz Name</Field.Label>
                 <Input />
@@ -125,7 +133,7 @@ export default function ViewQuiz() {
                 </NativeSelect.Root>
             </Field.Root>
         </Stack>
-        <Flex marginTop={10}>
+        <Flex marginTop={10} width="100%" justifyContent="center">
             <Stack w="1/4">
                 <Heading size="3xl" paddingLeft="10" marginBottom="5">Users</Heading>
                 {availableUsers.map((name, i) => <Card.Root
@@ -147,5 +155,5 @@ export default function ViewQuiz() {
                 {positionsStackItems}
             </Stack>
         </Flex>
-    </>
+    </Flex>
 }
