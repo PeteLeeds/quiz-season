@@ -27,7 +27,6 @@ export default function ViewQuiz() {
     const [positions, setPositions] = useState<string[][]>([])
     const [availableUsers, setAvailableUsers] = useState<string[]>(["John", "Chris", "Anne", "Debbie"])
     const [userToMove, setUserToMove] = useState<string | undefined>(undefined)
-    const [moveHere, setMoveHere] = useState<number>(0)
 
     const addUser = (position: number) => {
         setPositions([...positions, [availableUsers[position]]])
@@ -90,11 +89,11 @@ export default function ViewQuiz() {
     for (let i = 1; i <= 30; i++) {
         const entry = flatPositions.length > i - 1 ? flatPositions[i - 1] : undefined;
         const position = entry?.position || i
-        if (userToMove && moveHere == i && flatPositions.length > i - 2) {
-            positionsStackItems.push(<Button onClick={() => moveUser(position - 1)}>Move Here</Button>)
+        if (userToMove && flatPositions.length > i - 2) {
+            positionsStackItems.push(<Center><Button w="1/4" right="6" onClick={() => moveUser(position - 1)}>Move Here</Button></Center>)
         }
         if (entry) {
-            positionsStackItems.push(<Flex alignItems="center" onMouseEnter={() => setMoveHere(i)}>
+            positionsStackItems.push(<Flex alignItems="center">
             <Text textStyle="lg" fontWeight="bold">{position}</Text>
             <Card.Root w="3/4" alignItems={"center"} marginLeft="10" marginRight="10" key={entry.name} size="sm">
                 <Card.Body w="full" pt="2" pb="2">
