@@ -5,11 +5,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { faHandshake, faTrashCan, faUpDown } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { submitQuiz } from "@/services/quiz.service";
+import { useForm } from "react-hook-form"
 
 const quizSeasons = [
     "2026 Quiz Season",
     "2025 Quiz Season"
 ]
+
+interface FormValues {
+  quizName: string
+  quizSeason: string
+}
 
 const IconButton = ({icon, action}: {icon: IconProp, action: () => void}) =>
     <Button
@@ -27,6 +34,11 @@ export default function ViewQuiz() {
     const [positions, setPositions] = useState<string[][]>([])
     const [availableUsers, setAvailableUsers] = useState<string[]>(["John", "Chris", "Anne", "Debbie"])
     const [userToMove, setUserToMove] = useState<string | undefined>(undefined)
+
+    const {
+        register,
+        getValues
+    } = useForm<FormValues>()
 
     const addUser = (position: number) => {
         setPositions([...positions, [availableUsers[position]]])
@@ -79,7 +91,7 @@ export default function ViewQuiz() {
         setUserToMove(undefined)
     }
 
-    const flatPositions = positions.flatMap((pos, i) => pos.map(user => ({
+    const flatPositions: UserPosition[] = positions.flatMap((pos, i) => pos.map(user => ({
         name: user,
         position: i + 1,
         tied: pos.length > 1
@@ -117,15 +129,16 @@ export default function ViewQuiz() {
 
     return <Flex alignItems="center" direction="column" width="100%">
         <Heading size="5xl" paddingLeft="10" marginBottom="5">Enter Quiz</Heading>
+        <Button position="absolute" top="7rem" right="5" size="lg" onClick={() => submitQuiz(getValues("quizName"), getValues("quizSeason"), flatPositions)}>Submit</Button>
         <Stack marginLeft="10" w="1/4">
             <Field.Root>
                 <Field.Label>Quiz Name</Field.Label>
-                <Input />
+                <Input {...register("quizName")} />
             </Field.Root>
             <Field.Root>
                 <Field.Label>Quiz Season</Field.Label>
                 <NativeSelect.Root>
-                    <NativeSelect.Field>
+                    <NativeSelect.Field {...register("quizSeason")}>
                         {quizSeasons.map(season => <option key={season} value={season}>{season}</option>)}
                     </NativeSelect.Field>
                     <NativeSelect.Indicator />
