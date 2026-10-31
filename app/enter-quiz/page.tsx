@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Card, Center, Field, Flex, Heading, Input, NativeSelect, Spacer, Stack, Text } from "@chakra-ui/react";
+import { Button, Card, Center, CloseButton, Dialog, Field, Flex, Heading, Input, NativeSelect, Portal, Spacer, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { faHandshake, faTrashCan, faUpDown } from "@fortawesome/free-solid-svg-icons";
@@ -127,6 +127,51 @@ export default function ViewQuiz() {
         }
     }
 
+    const NewUserModal = () => {
+        const [newUserName, setNewUserName] = useState("")
+
+        return (
+            <>
+                <Dialog.Root>
+                    <Dialog.Trigger asChild>
+                        <Button>Add New User</Button>
+                    </Dialog.Trigger>
+                    <Portal>
+                        <Dialog.Backdrop />
+                        <Dialog.Positioner>
+                            <Dialog.Content>
+                                <Dialog.Header>
+                                    <Dialog.Title>New User</Dialog.Title>
+                                </Dialog.Header>
+                                <Dialog.Body>
+                                    <Field.Root>
+                                        <Field.Label>Enter the username of the new user</Field.Label>
+                                        <Input
+                                            placeholder="Username"
+                                            value={newUserName}
+                                            onChange={(e) => setNewUserName(e.target.value)}
+                                        />
+                                    </Field.Root>
+                                </Dialog.Body>
+                                <Dialog.Footer>
+                                    <Dialog.ActionTrigger asChild>
+                                        <Button variant="outline">Cancel</Button>
+                                    </Dialog.ActionTrigger>
+                                    <Dialog.ActionTrigger asChild>
+                                        <Button onClick={() => setAvailableUsers([...availableUsers, newUserName])}>Add User</Button>
+                                    </Dialog.ActionTrigger>
+                                </Dialog.Footer>
+                                <Dialog.CloseTrigger asChild>
+                                    <CloseButton size="sm" />
+                                </Dialog.CloseTrigger>
+                            </Dialog.Content>
+                        </Dialog.Positioner>
+                    </Portal>
+                </Dialog.Root>
+            </>
+        )
+    }
+
     return <Flex alignItems="center" direction="column" width="100%">
         <Heading size="5xl" paddingLeft="10" marginBottom="5">Enter Quiz</Heading>
         <Button position="absolute" top="7rem" right="5" size="lg" onClick={() => submitQuiz(getValues("quizName"), getValues("quizSeason"), flatPositions)}>Submit</Button>
@@ -148,6 +193,7 @@ export default function ViewQuiz() {
         <Flex marginTop={10} width="100%" justifyContent="center">
             <Stack w="1/4">
                 <Heading size="3xl" paddingLeft="10" marginBottom="5">Users</Heading>
+                <NewUserModal />
                 {availableUsers.map((name, i) => <Card.Root
                     cursor="pointer"
                     marginLeft="10"
