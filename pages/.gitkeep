@@ -1,0 +1,1 @@
+This folder is needed for Cypress tests to work, as the Cypress adapter specifically looks for a Pages Router directory.
