@@ -30,7 +30,7 @@ const IconButton = ({icon, action}: {icon: IconProp, action: () => void}) =>
     </Button>
 
 
-export default function ViewQuiz() {
+export default function EnterQuiz() {
     const [positions, setPositions] = useState<string[][]>([])
     const [availableUsers, setAvailableUsers] = useState<string[]>(["John", "Chris", "Anne", "Debbie"])
     const [userToMove, setUserToMove] = useState<string | undefined>(undefined)
