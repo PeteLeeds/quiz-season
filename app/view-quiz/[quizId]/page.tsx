@@ -52,11 +52,7 @@ const mockData: Quiz[] = [
     }
 ]
 
-export default function ViewQuiz() {
-    const params = useParams()
-
-    const quiz = mockData.find(quiz => quiz.id === params.quizId)
-
+export function QuizTable({quiz}: {quiz: Quiz}) {
     return <>
         <Heading size="5xl" paddingLeft="10" marginBottom="5">{quiz?.name}</Heading>
         <Box padding="10">
@@ -80,4 +76,18 @@ export default function ViewQuiz() {
             </Table.Root>
         </Box>
     </>
+}
+
+export default function ViewQuiz() {
+    const params = useParams()
+    if (!params?.quizId) {
+        throw new Error('QuizId not set in path')
+    }
+
+    const quiz = mockData.find(quiz => quiz.id === params.quizId)
+    if (!quiz) {
+        throw new Error('Quiz not found from params')
+    }
+
+    return <QuizTable quiz={quiz}></QuizTable>
 }
