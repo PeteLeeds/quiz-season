@@ -54,7 +54,7 @@ const mockData: Quiz[] = [
 
 export function QuizTable({quiz}: {quiz: Quiz}) {
     return <>
-        <Heading size="5xl" paddingLeft="10" marginBottom="5">{quiz?.name}</Heading>
+        <Heading data-cy="quiz-table-heading" size="5xl" paddingLeft="10" marginBottom="5">{quiz?.name}</Heading>
         <Box padding="10">
             <Table.Root size="lg">
                 <Table.Header>
@@ -64,9 +64,9 @@ export function QuizTable({quiz}: {quiz: Quiz}) {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {quiz?.results.map((result) => (
+                    {quiz?.results.map((result, i) => (
                         <Fragment key={result.user}>
-                            <Table.Row key={result.user}>
+                            <Table.Row data-cy={`quiz-table-row-${i}`} key={result.user}>
                                 <Table.Cell>{result.user}</Table.Cell>
                                 <Table.Cell>{result.points}</Table.Cell>
                             </Table.Row>

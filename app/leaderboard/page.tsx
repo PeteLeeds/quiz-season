@@ -40,25 +40,25 @@ export default function Leaderboard() {
     const [expanded, setExpanded] = useState<string | undefined>()
 
     return <>
-        <Heading size="5xl" paddingLeft="10">Leaderboard</Heading>
+        <Heading data-cy="heading" size="5xl" paddingLeft="10">Leaderboard</Heading>
         <Box padding="10">
             <Table.Root size="lg">
                 <Table.Header>
                     <Table.Row>
-                        <Table.ColumnHeader>Position</Table.ColumnHeader>
-                        <Table.ColumnHeader>Name</Table.ColumnHeader>
-                        <Table.ColumnHeader>Score</Table.ColumnHeader>
+                        <Table.ColumnHeader data-cy="position-header">Position</Table.ColumnHeader>
+                        <Table.ColumnHeader data-cy="name-header">Name</Table.ColumnHeader>
+                        <Table.ColumnHeader data-cy="score-header">Score</Table.ColumnHeader>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {mockData.map((item) => (
+                    {mockData.map((item, i) => (
                         <Fragment key={item.id}>
-                            <Table.Row key={item.id} onClick={() => expanded === item.id ? setExpanded(undefined) : setExpanded(item.id)}>
+                            <Table.Row data-cy={`row-${i}`} key={item.id} onClick={() => expanded === item.id ? setExpanded(undefined) : setExpanded(item.id)}>
                                 <Table.Cell>{item.position}</Table.Cell>
                                 <Table.Cell>{item.name}</Table.Cell>
                                 <Table.Cell>{item.total}</Table.Cell>
                             </Table.Row>
-                            { expanded === item.id && <Table.Row>
+                            { expanded === item.id && <Table.Row data-cy={`breakdown-row-${i}`}>
                                 <Table.Cell colSpan={3}>
                                 <Box padding="4" borderWidth="1px">
                                 <Heading size="md">Points Breakdown</Heading>

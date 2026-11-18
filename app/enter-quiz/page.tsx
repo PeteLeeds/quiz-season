@@ -18,8 +18,9 @@ interface FormValues {
   quizSeason: string
 }
 
-const IconButton = ({icon, action}: {icon: IconProp, action: () => void}) =>
+const IconButton = ({icon, action, dataCy}: {icon: IconProp, action: () => void, dataCy: string}) =>
     <Button
+        data-cy={dataCy}
         cursor="pointer"
         size="xs"
         h="20px"
@@ -106,8 +107,8 @@ export default function EnterQuiz() {
         }
         if (entry) {
             positionsStackItems.push(<Flex alignItems="center">
-            <Text textStyle="lg" fontWeight="bold">{position}</Text>
-            <Card.Root w="3/4" alignItems={"center"} marginLeft="10" marginRight="10" key={entry.name} size="sm">
+            <Text textStyle="lg" fontWeight="bold" data-cy={`card-${i}`}>{position}</Text>
+            <Card.Root data-cy={`user-${i}`} w="3/4" alignItems={"center"} marginLeft="10" marginRight="10" key={entry.name} size="sm">
                 <Card.Body w="full" pt="2" pb="2">
                     <Flex>
                         <Center width="full">
@@ -115,9 +116,9 @@ export default function EnterQuiz() {
                         </Center>
                         <Spacer />
                         <Flex alignItems="right" direction="column">
-                            <IconButton icon={faTrashCan} action={() => removeUser(entry.name, entry.position - 1)}></IconButton>
-                            <IconButton icon={faHandshake} action={() => tieUser(entry.name, entry.position - 1)}></IconButton>
-                            <IconButton icon={faUpDown} action={() => setUserToMove(entry.name)}></IconButton>
+                            <IconButton icon={faTrashCan} action={() => removeUser(entry.name, entry.position - 1) } dataCy={`remove-user-${i}`}></IconButton>
+                            <IconButton icon={faHandshake} action={() => tieUser(entry.name, entry.position - 1)} dataCy={`tie-user-${i}`}></IconButton>
+                            <IconButton icon={faUpDown} action={() => setUserToMove(entry.name)} dataCy={`move-user-${i}`}></IconButton>
                         </Flex>
                     </Flex>
                 </Card.Body>
@@ -173,7 +174,7 @@ export default function EnterQuiz() {
     }
 
     return <Flex alignItems="center" direction="column" width="100%">
-        <Heading size="5xl" paddingLeft="10" marginBottom="5">Enter Quiz</Heading>
+        <Heading data-cy="heading" size="5xl" paddingLeft="10" marginBottom="5">Enter Quiz</Heading>
         <Button position="absolute" top="7rem" right="5" size="lg" onClick={() => submitQuiz(getValues("quizName"), getValues("quizSeason"), flatPositions)}>Submit</Button>
         <Stack marginLeft="10" w="1/4">
             <Field.Root>
@@ -202,6 +203,7 @@ export default function EnterQuiz() {
                     size="sm"
                     _hover={{ background: "#ADD8E6" }}
                     onClick={() => addUser(i)}
+                    data-cy={`add-${i}`}
                 >
                     <Card.Body>
                         <Center><Heading size="md">{name}</Heading></Center>

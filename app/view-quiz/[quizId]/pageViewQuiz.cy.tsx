@@ -22,12 +22,12 @@ describe('<ViewQuiz />', () => {
 
   it('renders with title', () => {
     cy.mount(<QuizTable quiz={mockQuiz} />)
-    cy.get('h2').contains('Pointless')
+    cy.get('[data-cy="quiz-table-heading"]').contains('Pointless')
   })
 
   it('displays users in correct order', () => {
     cy.mount(<QuizTable quiz={mockQuiz} />)
-    cy.get('table').find('tr').eq(1).find('td').contains('Chris')
-    cy.get('table').find('tr').eq(2).find('td').contains('Bob')
+    cy.get('[data-cy="quiz-table-row-0"]').contains('Chris')
+    cy.get('[data-cy="quiz-table-row-1"]').contains('Bob')
   })
 })
