@@ -103,7 +103,7 @@ export default function EnterQuiz() {
         const entry = flatPositions.length > i - 1 ? flatPositions[i - 1] : undefined;
         const position = entry?.position || i
         if (userToMove && flatPositions.length > i - 2) {
-            positionsStackItems.push(<Center><Button w="1/4" right="6" onClick={() => moveUser(position - 1)}>Move Here</Button></Center>)
+            positionsStackItems.push(<Center><Button data-cy={`move-here-${position}`} w="1/4" right="6" onClick={() => moveUser(position - 1)}>Move Here</Button></Center>)
         }
         if (entry) {
             positionsStackItems.push(<Flex alignItems="center">

@@ -30,4 +30,14 @@ describe('<EnterQuiz />', () => {
     cy.get('[data-cy="tie-user-2"]').click()
     cy.get('[data-cy="card-2"]').contains('1')
   })
+
+  it('moves user when pressing move', () => {
+    cy.mount(<EnterQuiz />)
+    cy.get('[data-cy="add-1"]').click()
+    cy.get('[data-cy="add-1"]').click()
+    cy.get('[data-cy="add-1"]').click()
+    cy.get('[data-cy="move-user-2"]').click()
+    cy.get('[data-cy="move-here-1"]').click()
+    cy.get('[data-cy="user-1"]').contains('Anne')
+  })
 })
